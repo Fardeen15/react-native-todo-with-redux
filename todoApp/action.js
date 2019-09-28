@@ -4,3 +4,16 @@ export function add(payload){
         payload
     }
 }
+export function del(payload){
+    return {
+        type : "del",
+        payload
+    }
+}
+export function edit(payload,index){
+    return {
+        type : "edit",
+        payload,
+        index
+    }
+}

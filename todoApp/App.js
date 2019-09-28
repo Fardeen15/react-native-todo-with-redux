@@ -13,19 +13,30 @@ import { Tabs, Tab, TabHeading, Text, Icon, Header, View } from 'native-base';
 import List from './components/list';
 
 class App extends React.Component {
+  constructor() {
+    super()
+    this.state = {
+      form: true,
+      list: false
+    }
+  }
   render() {
 
     return (
       <>
-       
+
         <Provider store={store}>
-          <Tabs>
-            <Tab heading={<TabHeading><Text>Form</Text></TabHeading>}>
-              <FormComponent />
+          <Tabs tabBarUnderlineStyle = {{height : 2, backgroundColor : 'black'}} onChangeTab={() => this.setState({
+            form: !this.state.form,
+            list: !this.state.list
+          })}>
+            <Tab
+             heading={<TabHeading style={{backgroundColor: "#b7daf8" }}><Text style={{color : 'black'}}>Form</Text></TabHeading>}>
+              {this.state.form ? <FormComponent /> : null}
             </Tab>
-            <Tab heading={<TabHeading><Text>No Icon</Text></TabHeading>}>
+            <Tab heading={<TabHeading style={{backgroundColor: "#b7daf8" }}><Text  style={{color : 'black'}}>No Icon</Text></TabHeading>}>
               <View>
-                <List/>
+                {this.state.list ? <List /> : null}
               </View>
             </Tab>
           </Tabs>

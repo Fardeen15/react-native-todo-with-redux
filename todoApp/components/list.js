@@ -1,28 +1,51 @@
 import React from 'react'
 import { connect } from 'react-redux'
-import { Text, Container, View, Icon, Accordion, Content } from 'native-base'
-const dataArray = [
-    { title: "First Element", content: "Lorem ipsum dolor sit amet" },
-    { title: "Second Element", content: "Lorem ipsum dolor sit amet" },
-    { title: "Third Element", content: "Lorem ipsum dolor sit amet" }
-];
-
+import { Text, ActionSheet, View, Icon, Accordion, Content, Button } from 'native-base'
+import { StyleSheet, } from 'react-native';
+import { del } from '../action';
+import TestModal from './test';
+import { edit } from '../action';
+const styles = StyleSheet.create({
+    icon: {
+        position: 'absolute',
+        right: "5%",
+        fontSize: 20
+    },
+    delbtn: {
+        width: 40,
+        height: 40,
+        marginRight: "5%",
+    },
+    edtbtn: {
+        width: 40,
+        height: 40,
+    },
+    btnprnt: {
+        fontSize: 15,
+        display: "flex",
+        flexDirection: 'row',
+        marginTop: "5%",
+    }
+});
 class List extends React.Component {
-    constructor(){
+    constructor() {
         super()
         this.state = {
-            list : []
+            list: [],
+            del: false,
+            edit: false,
+            item: ""
         }
     }
     _renderHeader(item, expanded) {
-        console.warn(item)
+        // console.warn(item)
         return (
             <View style={{
                 flexDirection: "row",
                 padding: 10,
                 justifyContent: "space-between",
                 alignItems: "center",
-                backgroundColor: "#A9DAD6"
+                backgroundColor: "#b7daf8"
             }}>
                 <Text style={{ fontWeight: "600" }}>
                     {item.fname}
@@ -33,26 +56,57 @@ class List extends React.Component {
             </View>
         );
     }
-    _renderContent(item) {
+    _del(item) {
+        // console.warn('run')
+        var arr = this.props.users
+        for (var i = 0; i < arr.length; i++) {
+            if (arr[i] === item) {
+                this.props.del(i)
+                this.setState({
+                    del: !this.state.del
+                })
+            }
+        }
+    }
+    edit = () => {
+        this.setState({
+            edit: !this.state.edit
+        })
+    }
+    _renderContent = (item) => {
+        // console.warn(item)
         return (
             <View
                 style={{
+                    width: '100%',
                     backgroundColor: "#e3f1f1",
                     padding: 10,
                     fontStyle: "italic",
+                    textAlign: 'center',
+                    alignItems: "center"
                 }}
             >
                 <Text>First Name : {item.fname}</Text>
                 <Text>Last Name : {item.lname}</Text>
                 <Text>Age : {item.age}</Text>
                 <Text>qualification : {item.Qualification}</Text>
+                <View style={styles.btnprnt}>
+
+                    <Button onPress={() => this._del(item)} style={styles.delbtn} rounded bordered danger transparent><Icon style={{ textAlign: 'center', width: "100%", fontSize: 18 }} name="trash" /></Button>
+                    <Button onPress={() => {
+                        this.edit()
+                        this.setState({
+                            item: item
+                        })
+                    }} style={styles.edtbtn} rounded bordered success transparent><Icon style={{ textAlign: 'center', width: "100%", fontSize: 18 }} type="FontAwesome5" name="user-edit" /></Button>
+                </View>
             </View>
         );
     }
-    componentWillMount(){
-        console.warn(this.props)
+
+    componentWillMount() {
         this.setState({
-            list : this.props.users
+            list: this.props.users
         })
     }
     render() {
@@ -61,18 +115,22 @@ class List extends React.Component {
                 padding: 10,
             }}>
                 <Accordion
-                    dataArray={this.state.list}
+                    dataArray={this.props.users}
                     headerStyle={{ backgroundColor: "#b7daf8" }}
                     contentStyle={{ backgroundColor: "#ddecf8" }}
                     renderHeader={this._renderHeader}
                     renderContent={this._renderContent}
                 />
+                {this.state.edit ?
+                    <TestModal user={this.props.users} editfn={this.props.edit} value={this.state.item} closemodal={this.edit} open={this.state.edit} />
+                    : null}
             </View>
         )
     }
 }
 
 
+const mapDispatchToProps = { del, edit }
 
 const mapStateToProps = (state) => {
     // console.warn(state)
@@ -81,5 +139,6 @@ const mapStateToProps = (state) => {
     }
 }
 export default connect(
-    mapStateToProps ,
+    mapStateToProps,
+    mapDispatchToProps
 )(List)

@@ -14,11 +14,9 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     Items: {
-        // margin : "10px"
-        // marginRight: 'auto',
-        // marginLeft: 'auto',
+        borderBottomColor :"#b7daf8",
         margin: 10,
-        width: '70%',
+        width: '60%',
     }
 });
 class FormComponent extends React.Component {
@@ -54,7 +52,7 @@ class FormComponent extends React.Component {
             age: "",
             Qualification: ""
         },()=>{
-            console.warn(this.props.users)
+            // console.warn(this.props.users)
         })
     }
     render() {
@@ -92,7 +90,7 @@ class FormComponent extends React.Component {
                         style={{ height: 30, fontSize: 12 }}
                         placeholder="Qualification" />
                 </Item>
-                <Button onPress={this.submit} style={{height : 30 , textAlign : 'center'}} rounded>
+                <Button info onPress={this.submit} style={{height : 30 , textAlign : 'center'}} rounded>
                     <Text >submit</Text>
                 </Button>
             </Container>
